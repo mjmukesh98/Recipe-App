@@ -8,6 +8,7 @@ This project follows **Clean Architecture** with a feature-based structure to ke
 
 The codebase is divided into three main layers:
 
+
 * **Presentation Layer** → UI and BLoC
 * **Domain Layer** → UseCases and business logic
 * **Data Layer** → API calls and local storage (Hive)
