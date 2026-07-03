@@ -504,15 +504,14 @@ class _RecipePageState extends State<RecipePage> {
 
                                         Text(
                                           "Sort A-Z",
-                                          style: Theme.of(context)
+                                          style: Theme
+                                              .of(context)
                                               .textTheme
                                               .titleMedium
                                               ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.onSurface,
-                                              ),
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.green,
+                                          ),
                                         ),
                                       ],
                                     ),

@@ -120,7 +120,7 @@ class RecipeDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 10),
 
-                    _infoBox([
+                    _infoBox(context, [
                       "${AppStrings.prepTime} ${recipe.prepTimeMinutes} min",
                       "${AppStrings.cookTime} ${recipe.cookTimeMinutes} min",
                       "${AppStrings.reviews} ${recipe.reviewCount}",
@@ -141,7 +141,7 @@ class RecipeDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 10),
 
-                    _listBox(recipe.ingredients ?? []),
+                    _listBox(context, recipe.ingredients ?? []),
 
                     const SizedBox(height: 20),
 
@@ -156,7 +156,7 @@ class RecipeDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 10),
 
-                    _listBox(recipe.instructions ?? []),
+                    _listBox(context, recipe.instructions ?? []),
                   ],
                 ),
               ),
@@ -186,12 +186,15 @@ class RecipeDetailPage extends StatelessWidget {
   }
 
   // ================= INFO BOX =================
-  Widget _infoBox(List<String> items) {
+  Widget _infoBox(BuildContext context, List<String> items) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Column(
@@ -199,25 +202,37 @@ class RecipeDetailPage extends StatelessWidget {
         children: items
             .map(
               (e) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3),
-            child: Text("• $e"),
-          ),
-        )
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  "• $e",
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            )
             .toList(),
       ),
     );
   }
 
   // ================= LIST BOX =================
-  Widget _listBox(List<String> items) {
+  Widget _listBox(BuildContext context, List<String> items) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
@@ -228,7 +243,13 @@ class RecipeDetailPage extends StatelessWidget {
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Text("$index. $value", style: const TextStyle(height: 1.4)),
+            child: Text(
+              "$index. $value",
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurface,
+                height: 1.4,
+              ),
+            ),
           );
         }).toList(),
       ),
