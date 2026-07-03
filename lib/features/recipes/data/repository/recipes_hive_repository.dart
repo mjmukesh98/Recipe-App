@@ -20,7 +20,9 @@ class RecipesHiveRepository {
   Future<void> deleteRecipe(int id) async {
     await box.delete(id);
   }
-
+  RecipeHiveModel? getById(int id) {
+    return box.get(id);
+  }
   Future<void> addAll(List<RecipeHiveModel> recipes) async {
     await box.clear();
     await box.putAll({for (var r in recipes) r.id: r});

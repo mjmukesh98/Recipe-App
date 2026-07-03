@@ -38,4 +38,21 @@ class RecipesRemoteDataSource {
       throw ErrorHandler.handle(e);
     }
   }
+
+  Future<Recipe> recipesId({int? id}) async {
+    final isConnected = await networkService.checkConnection();
+
+    if (!isConnected) {
+      throw Exception("No internet connection. Please check your network.");
+    }
+
+    try {
+      final response = await apiClient.get(path: "${ApiEndpoints.recipes}/$id");
+      return Recipe.fromMap(response.data);
+    } on DioException catch (e) {
+      throw ErrorHandler.handle(e);
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }

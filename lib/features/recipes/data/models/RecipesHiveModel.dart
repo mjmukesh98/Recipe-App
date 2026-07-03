@@ -50,8 +50,8 @@ class RecipeHiveModel extends HiveObject {
   @HiveField(15)
   final List<String>? mealType;
 
-  @HiveField(16)
-  final bool? isFavorite;
+  @HiveField(15)
+  bool? isFavorite;
 
   RecipeHiveModel({
     this.id,

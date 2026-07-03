@@ -12,8 +12,10 @@ class NetworkService {
   }
 
   Future<bool> checkConnection() async {
-    final result = await _connectivity.checkConnectivity();
+    final results = await _connectivity.checkConnectivity();
 
-    return result != ConnectivityResult.none;
+    print("Connectivity Result: $results");
+
+    return !results.contains(ConnectivityResult.none);
   }
 }

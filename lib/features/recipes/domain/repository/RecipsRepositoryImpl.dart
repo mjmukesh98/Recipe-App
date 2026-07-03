@@ -12,4 +12,10 @@ class RecipesRepositoryImpl implements RecipesRepository {
     final recipe = remote.recipes();
     return recipe;
   }
+
+  @override
+  Future<Recipe> recipesId({int? id}) {
+    final recipe = remote.recipesId(id: id);
+    return recipe;
+  }
 }

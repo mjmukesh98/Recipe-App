@@ -9,4 +9,8 @@ class RecipesUseCase {
   Future<RecipesModel> recipes() {
     return repository.recipes();
   }
+
+  Future<Recipe> recipesId({int? id}) {
+    return repository.recipesId(id: id);
+  }
 }

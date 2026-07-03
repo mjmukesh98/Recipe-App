@@ -2,6 +2,18 @@ abstract class RecipesEvent {}
 
 class GetRecipe extends RecipesEvent {}
 
+class GetRecipeId extends RecipesEvent {
+  final int? id;
+
+  GetRecipeId({this.id});
+}
+
+class ToggleFavorite extends RecipesEvent {
+  final int id;
+
+  ToggleFavorite({required this.id});
+}
+
 class SearchRecipe extends RecipesEvent {
   final String query;
 

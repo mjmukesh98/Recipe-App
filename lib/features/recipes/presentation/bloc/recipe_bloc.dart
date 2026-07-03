@@ -19,6 +19,8 @@ class RecipeBloc extends Bloc<RecipesEvent, RecipesState> {
     on<FilterRecipe>(_onFilterRecipe);
     on<SortRecipe>(_onSortRecipe);
     on<LoadLocalRecipe>(_onLoadLocalRecipe);
+    on<GetRecipeId>(_onRecipeId);
+    on<ToggleFavorite>(_onToggleFavorite);
   }
 
   Future<void> _onRecipe(GetRecipe event, Emitter<RecipesState> emit) async {
@@ -37,10 +39,27 @@ class RecipeBloc extends Bloc<RecipesEvent, RecipesState> {
     }
   }
 
-  Future<void> _onRefreshRecipe(
-    RefreshRecipe event,
-    Emitter<RecipesState> emit,
-  ) async {
+  Future<void> _onRecipeId(GetRecipeId event,
+      Emitter<RecipesState> emit,) async {
+    final currentState = state;
+
+    try {
+      final recipe = await recipeUseCase.recipesId(id: event.id);
+
+      if (currentState is RecipesSuccess) {
+        emit(
+          currentState.copyWith(
+            recipeDetail: recipe,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(RecipesFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onRefreshRecipe(RefreshRecipe event,
+      Emitter<RecipesState> emit,) async {
     try {
       final recipe = await recipeUseCase.recipes();
       _allRecipes = recipe.recipes ?? [];
@@ -155,5 +174,49 @@ class RecipeBloc extends Bloc<RecipesEvent, RecipesState> {
     }
 
     emit(current.copyWith(filteredRecipes: list));
+  }
+
+  Future<void> _onToggleFavorite(ToggleFavorite event,
+      Emitter<RecipesState> emit,) async {
+    final hiveRecipe = HiveService.recipesBox.get(event.id);
+
+    if (hiveRecipe == null) return;
+
+    hiveRecipe.isFavorite = !(hiveRecipe.isFavorite ?? false);
+
+    await HiveService.recipesBox.put(event.id, hiveRecipe);
+
+    final updatedRecipes = HiveService.recipesBox.values.map((e) {
+      return Recipe(
+        id: e.id,
+        name: e.name,
+        ingredients: e.ingredients,
+        instructions: e.instructions,
+        prepTimeMinutes: e.prepTimeMinutes,
+        cookTimeMinutes: e.cookTimeMinutes,
+        servings: e.servings,
+        difficulty: e.difficulty,
+        cuisine: e.cuisine,
+        caloriesPerServing: e.caloriesPerServing,
+        tags: e.tags,
+        userId: e.userId,
+        image: e.image,
+        rating: e.rating,
+        reviewCount: e.reviewCount,
+        mealType: e.mealType,
+        isFavorite: e.isFavorite,
+      );
+    }).toList();
+
+    _allRecipes = updatedRecipes;
+    _allShowRecipes = updatedRecipes;
+
+    emit(
+      RecipesSuccess(
+        RecipesModel(),
+        _allRecipes,
+        _allShowRecipes,
+      ),
+    );
   }
 }

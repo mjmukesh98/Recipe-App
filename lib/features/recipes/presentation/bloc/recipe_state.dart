@@ -10,17 +10,26 @@ class RecipesSuccess extends RecipesState {
   final RecipesModel recipes;
   final List<Recipe> filteredRecipes;
   final List<Recipe> showRecipesList;
+  final Recipe? recipeDetail;
 
-  RecipesSuccess(this.recipes, this.filteredRecipes, this.showRecipesList);
+  RecipesSuccess(
+    this.recipes,
+    this.filteredRecipes,
+    this.showRecipesList, {
+    this.recipeDetail,
+  });
 
   RecipesSuccess copyWith({
+    RecipesModel? recipes,
     List<Recipe>? filteredRecipes,
     List<Recipe>? showRecipesList,
+    Recipe? recipeDetail,
   }) {
     return RecipesSuccess(
-      recipes,
+      recipes ?? this.recipes,
       filteredRecipes ?? this.filteredRecipes,
-      this.showRecipesList,
+      showRecipesList ?? this.showRecipesList,
+      recipeDetail: recipeDetail ?? this.recipeDetail,
     );
   }
 }
